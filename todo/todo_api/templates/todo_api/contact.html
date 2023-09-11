@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <title> Django and Fetch API Form Submissions- No Page Refresh</title>
+</head>
+
+<body style="text-align: center; display: block">
+    <p id="output-message"></p>
+    <form method="post">
+        {% csrf_token %}
+        <label for="{{ form.task.id_for_label }}">Task:</label>
+        {{ form.task }}
+        {% if form.task.errors %}
+            <div class="error">{{ form.task.errors }}</div>
+        {% endif %}
+        <button type="submit">Add Task</button>
+    </form>
+    
+    
+</body>
+
+</html>
