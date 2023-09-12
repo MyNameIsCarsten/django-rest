@@ -1,8 +1,10 @@
+{% load static %}
 <!doctype html>
 <html lang="en">
 
 <head>
     <title> Django and Fetch API Form Submissions- No Page Refresh</title>
+    <script src="{% static 'script.js' %}"></script>
 </head>
 
 <body style="text-align: center; display: block">
@@ -15,9 +17,15 @@
             <div class="error">{{ form.task.errors }}</div>
         {% endif %}
         <button type="submit">Add Task</button>
+        <br>
+        <a href="{% url 'api' %}">Go to API</a>
+       
     </form>
     
-    
+    <script>
+        
+
+    </script>
 </body>
 
 </html>

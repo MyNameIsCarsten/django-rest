@@ -40,7 +40,61 @@ The `@login_required` decorators ensures that only a logged in user can access t
 # Model serializer
 The conversion of an Model object into an API-usable format (e.g. JSON) is done via a serializer. The Django REST framework does this via the ModelSerializer class (see `serializers.py`).
 
+# Using the Fetch Api with Django Rest Framework
+For the purpose of demonstrating the usage of the fetch API in connection with our endpoints, I have integrated a JavaScript (`script.js`).
+
+## Acquire csrf token
+First we need to acquire our csrf token (as decribed in the [documentaion](https://docs.djangoproject.com/en/4.2/howto/csrf/#acquiring-the-token-if-csrf-use-sessions-and-csrf-cookie-httponly-are-false)):
+```
+// Acquiring the csrf token
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            // Does this cookie string begin with the name we want?
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+const csrftoken = getCookie('csrftoken');
+```
+## Fetch data from api using JavaScript
+Afterwards we fetch data from our api endpoint:
+```
+// Example of fetching data from our api
+fetch("/todos/api/1/", {
+    method: "get",
+    headers: {
+        "X-CSRFToken": getCookie("csrftoken"),
+        "Accept": "application/json",
+        "Content-Type": "application/json"
+    },
+}).then(function(response) {
+    return response.json();
+}).then(function(data) {
+    console.log("Data is ok", data); // log data to console
+}).catch(function(ex) {
+    console.log("parsing failed", ex); // log error to console
+});
+```
+
+Since I have implemented the script in the `contact.html` header, we get the following log within our console if we visit `http://127.0.0.1:8000/`:
+
+![Fetch Api](./fetch-api.jpg)
+
+If we compare this to what we get with our api endpoint (`http://127.0.0.1:8000/todos/api/1/`) we see that they are identical:
+
+![Detail Api](./api-detail-1.jpg)
+
+
 # Source
 The code is based on tutorials: 
 - [How to create a REST API with Django REST framework](https://blog.logrocket.com/django-rest-framework-create-api/)
 - [Django And Fetch API Form Submissions –Without Page Reloading](https://ridwanray.medium.com/django-and-fetch-api-form-submissions-without-page-reloading-dc5106598005)
+- [Using the Fetch Api with Django Rest Framework](https://gist.github.com/marteinn/3785ff3c1a3745ae955c)
