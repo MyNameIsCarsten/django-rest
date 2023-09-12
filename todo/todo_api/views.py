@@ -12,6 +12,17 @@ from django.contrib.auth.decorators import login_required
 
 from .forms import TodoForm  
 
+from django.contrib.auth.views import LoginView
+from django.urls import reverse_lazy
+
+class CustomLoginView(LoginView):
+    template_name = 'todo_api/login.html'
+    fields = '__all__'
+    redirect_authenticated_user = True
+    
+    def get_success_url(self):
+        return reverse_lazy('contact')
+
 @login_required
 def contact(request):
     if request.method == 'POST':

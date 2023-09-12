@@ -17,12 +17,15 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from todo_api import urls as todo_urls
+from todo_api.views import (
+    CustomLoginView
+)
 
 from todo_api import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-
+    path('login/', CustomLoginView.as_view(), name='login'),
     path('', views.contact, name='contact'),
     # Include paths from rest_framework (venv/Lib/site-packages) and urls.py
     path('api-auth/', include('rest_framework.urls')),
